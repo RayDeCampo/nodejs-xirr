@@ -1,0 +1,15 @@
+{
+  "name": "irregular-internal-rate",
+  "version": "0.0.1",
+  "keywords": [],
+  "author": "ray",
+  "contributors": [],
+  "dependencies": {
+    "newton-raphson-method": "^1.0.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "jit-grunt": "^0.10.0"
+  }
+}
