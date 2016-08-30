@@ -18,5 +18,11 @@ module.exports = function (grunt) {
         },
         all: ['**/*.js', '!node_modules/**']
     });
+
+    grunt.config('mochaTest', {
+        test: {
+            src: ['test/**/*.js']
+        }
+    });
 };
 
