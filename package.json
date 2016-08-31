@@ -10,6 +10,7 @@
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-test": "^0.12.7",
     "jit-grunt": "^0.10.0",
     "mocha": "^3.0.2"

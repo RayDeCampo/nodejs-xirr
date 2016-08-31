@@ -24,5 +24,14 @@ module.exports = function (grunt) {
             src: ['test/**/*.js']
         }
     });
+
+    grunt.config('watch', {
+        all: {
+            files: ['**/*.js', '!node_modules/**'],
+            tasks: ['jshint', 'mochaTest']
+        }
+    });
+
+    grunt.registerTask('default', ['jshint', 'mochaTest', 'watch']);
 };
 
