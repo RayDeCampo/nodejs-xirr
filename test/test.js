@@ -5,6 +5,7 @@
 var assert = require('assert');
 var requireSubvert = require('require-subvert')(__dirname);
 var sinon = require('sinon');
+
 var xirr = require('../xirr');
 
 describe('xirr', function() {

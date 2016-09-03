@@ -10,7 +10,7 @@ function convert(data) {
         throw new Error('Argument is not an array with length of 2 or more.');
     }
 
-    var transactions = [];
+    var investments = [];
     var start = Math.floor(data[0].when/MILLIS_PER_DAY);
     var end = start;
     var positive = false;
@@ -21,12 +21,9 @@ function convert(data) {
         var epochDays = Math.floor(datum.when/MILLIS_PER_DAY);
         start = Math.min(start, epochDays);
         end = Math.max(end, epochDays);
-        if (datum.amount < 0) {
-            negative = true;
-        } else if (datum.amount > 0) {
-            positive = true;
-        }
-        transactions.push({
+        positive = positive || datum.amount > 0;
+        negative = negative || datum.amount < 0;
+        investments.push({
             amount: datum.amount,
             epochDays: epochDays
         });
@@ -37,42 +34,37 @@ function convert(data) {
     if (!negative || !positive) {
         throw new Error('Transactions must not all be the same sign.');
     }
-    transactions.forEach(function(datum) {
+    investments.forEach(function(investment) {
         // Number of years (including fraction) this item applies
-        datum.years = (end - datum.epochDays) / DAYS_IN_YEAR;
+        investment.years = (end - investment.epochDays) / DAYS_IN_YEAR;
     });
     return {
         total: total,
-        transactions: transactions
+        investments: investments
     };
 }
 
 function xirr(transactions, options) {
     var data = convert(transactions);
-    transactions = data.transactions;
-    var val = function(rate) {
-        var sum = 0;
-        for (var i = 0; i < transactions.length; i++) {
-            // Make the vars more math-y
-            var A = transactions[i].amount;
-            var Y = transactions[i].years;
-            sum += A * Math.pow(1+rate, Y);
-        }
-        return sum;
+    var investments = data.investments;
+    var presentValue = function(rate) {
+        return investments.reduce(function(sum, investment) {
+            // Make the vars more Math-y, makes the derivative easier to see
+            var A = investment.amount;
+            var Y = investment.years;
+            return sum + A * Math.pow(1+rate, Y);
+        }, 0);
     };
     var derivative = function(rate) {
-        var sum = 0;
-        for (var i = 0; i < transactions.length; i++) {
-            // Make the vars more math-y
-            var A = transactions[i].amount;
-            var Y = transactions[i].years;
-            if (Y !== 0) {
-                sum += A * Y * Math.pow(1+rate, Y-1);
-            }
-        }
-        return sum;
+        return investments.reduce(function(sum, investment) {
+            // Make the vars more Math-y, makes the derivative easier to see
+            var A = investment.amount;
+            var Y = investment.years;
+            return sum + A * Y * Math.pow(1+rate, Y-1);
+        }, 0);
     };
-    var rate = newton(val, derivative, Math.sign(data.total)/100, options);
+    var guess = Math.sign(data.total)/100;
+    var rate = newton(presentValue, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");
     }
