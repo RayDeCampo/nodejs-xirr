@@ -54,9 +54,9 @@ function xirr(transactions, options) {
         var sum = 0;
         for (var i = 0; i < transactions.length; i++) {
             // Make the vars more math-y
-            var D = transactions[i].amount;
+            var A = transactions[i].amount;
             var Y = transactions[i].years;
-            sum += D * Math.pow(1+rate, Y);
+            sum += A * Math.pow(1+rate, Y);
         }
         return sum;
     };
@@ -64,16 +64,16 @@ function xirr(transactions, options) {
         var sum = 0;
         for (var i = 0; i < transactions.length; i++) {
             // Make the vars more math-y
-            var D = transactions[i].amount;
+            var A = transactions[i].amount;
             var Y = transactions[i].years;
             if (Y !== 0) {
-                sum += D * Y * Math.pow(1+rate, Y-1);
+                sum += A * Y * Math.pow(1+rate, Y-1);
             }
         }
         return sum;
     };
     var rate = newton(val, derivative, Math.sign(data.total)/100, options);
-    if (rate === false) {  // truthiness strikes again
+    if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");
     }
     return rate;

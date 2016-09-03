@@ -1,8 +1,24 @@
 {
-  "name": "irregular-internal-rate",
-  "version": "0.0.1",
-  "keywords": [],
-  "author": "ray",
+  "name": "xirr",
+  "version": "1.0.0",
+  "description": "Compute the internal rate of return of a sequences of transactions made at irregular periods.",
+  "keywords": [
+    "xirr",
+    "irregular",
+    "rate",
+    "return"
+  ],
+  "main": "xirr.js",
+  "license": "MIT",
+  "bugs": "https://github.com/RayDeCampo/nodejs-xirr/issues",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/RayDeCampo/nodejs-xirr.git"
+    },
+  "author": {
+    "name": "Ray DeCampo",
+    "email": "ray@decampo.org"
+  },
   "contributors": [],
   "dependencies": {
     "newton-raphson-method": "^1.0.0"

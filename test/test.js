@@ -5,7 +5,7 @@
 var assert = require('assert');
 var requireSubvert = require('require-subvert')(__dirname);
 var sinon = require('sinon');
-var xirr = require('../');
+var xirr = require('../xirr');
 
 describe('xirr', function() {
     it('computes the xirr on 1 year growth of 0%', function() {
@@ -49,7 +49,7 @@ describe('xirr', function() {
             var newtonStub = sinon.stub();
             newtonStub.returns(false);
             requireSubvert.subvert('newton-raphson-method', newtonStub);
-            var xirrWithStub = requireSubvert.require('../lib/xirr');
+            var xirrWithStub = requireSubvert.require('../xirr');
             var transactions = [];
             transactions.push({ amount: -1000, when: new Date(2010,0,1) });
             transactions.push({ amount: 1100, when: new Date(2011,0,1) });
