@@ -31,7 +31,7 @@ Given a sequence of transactions, computes the internal rate of return.
   - `when`: the Date when the transaction occurred
 - `options`: Options to pass directly to the underlying Newton's method implementation, [`newton-raphson-method`](https://github.com/scijs/newton-raphson-method)
 
-**Returns**: the annualized internal rate of return as a decimal in [-1,1]
+**Returns**: the annualized internal rate of return as a decimal in [-1,∞)
 
 **Throws**:
 - Error:

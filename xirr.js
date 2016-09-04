@@ -13,16 +13,16 @@ function convert(data) {
     var investments = [];
     var start = Math.floor(data[0].when/MILLIS_PER_DAY);
     var end = start;
-    var positive = false;
     var negative = false;
+    var nonnegative = false;
     var total = 0;
     data.forEach(function(datum) {
         total += datum.amount;
         var epochDays = Math.floor(datum.when/MILLIS_PER_DAY);
         start = Math.min(start, epochDays);
         end = Math.max(end, epochDays);
-        positive = positive || datum.amount > 0;
         negative = negative || datum.amount < 0;
+        nonnegative = nonnegative || datum.amount >= 0;
         investments.push({
             amount: datum.amount,
             epochDays: epochDays
@@ -31,8 +31,11 @@ function convert(data) {
     if (start === end) {
         throw new Error('Transactions must not all be on the same day.');
     }
-    if (!negative || !positive) {
-        throw new Error('Transactions must not all be the same sign.');
+    if (!negative) {
+        throw new Error('Transactions must not all be nonnegative.');
+    }
+    if (!nonnegative) {
+        throw new Error('Transactions must not all be negative.');
     }
     investments.forEach(function(investment) {
         // Number of years (including fraction) this item applies
@@ -60,7 +63,11 @@ function xirr(transactions, options) {
             // Make the vars more Math-y, makes the derivative easier to see
             var A = investment.amount;
             var Y = investment.years;
-            return sum + A * Y * Math.pow(1+rate, Y-1);
+            if (Y !== 0) {
+                return sum + A * Y * Math.pow(1+rate, Y-1);
+            } else {
+                return sum;
+            }
         }, 0);
     };
     var guess = Math.sign(data.total)/100;
