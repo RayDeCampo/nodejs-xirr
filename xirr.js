@@ -47,6 +47,11 @@ function convert(data) {
     };
 }
 
+function signum(num) {
+    return num > 0 ? 1
+        : num < 0 ? -1 : 0;
+}
+
 function xirr(transactions, options) {
     var data = convert(transactions);
     var investments = data.investments;
@@ -70,7 +75,7 @@ function xirr(transactions, options) {
             }
         }, 0);
     };
-    var guess = Math.sign(data.total)/100;
+    var guess = signum(data.total)/100;
     var rate = newton(presentValue, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");

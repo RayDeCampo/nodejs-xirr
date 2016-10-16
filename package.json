@@ -1,6 +1,6 @@
 {
   "name": "xirr",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Compute the internal rate of return of a sequences of transactions made at irregular periods.",
   "keywords": [
     "xirr",
