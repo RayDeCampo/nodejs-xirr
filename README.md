@@ -2,7 +2,7 @@
 
 The internal rate of return of an investment made at irregular intervals is the constant rate of return which would yield the equivalent value.
 
-For example, suppose you purchased $1000 in a stock on January 15, then $2500 on February 8 and finally another $1500 on April 17.  The value of the stock on August 24 is $5050.  The internal rate of return could be computed by:
+For example, suppose you purchased $1000 in a stock on January 15, then $2500 on February 8 and finally another $1000 on April 17.  The value of the stock on August 24 is $5050.  The internal rate of return could be computed by:
 
 ```` javascript
 var xirr = require('xirr');
