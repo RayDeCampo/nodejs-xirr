@@ -72,6 +72,42 @@ describe('xirr', function() {
         assert.equal(-1, result.toPrecision(6));
     });
 
+    it('does not error out on this data set (see issue #1)', function() {
+        var transactions = [];
+        transactions.push({ amount: -10000, when: new Date('2000-05-24T00:00:00.000Z') });
+        transactions.push({ amount: 3027.25, when: new Date('2000-06-05T00:00:00.000Z') });
+        transactions.push({ amount: 630.68, when: new Date('2001-04-09T00:00:00.000Z') });
+        transactions.push({ amount: 2018.2, when: new Date('2004-02-24T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2005-03-18T00:00:00.000Z') });
+        transactions.push({ amount: 1765.89, when: new Date('2006-02-15T00:00:00.000Z') });
+        transactions.push({ amount: 4036.33, when: new Date('2007-01-10T00:00:00.000Z') });
+        transactions.push({ amount: 4036.33, when: new Date('2007-11-14T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2008-12-17T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2010-01-15T00:00:00.000Z') });
+        transactions.push({ amount: 2018.16, when: new Date('2011-01-14T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2012-02-03T00:00:00.000Z') });
+        transactions.push({ amount: 1009.08, when: new Date('2013-01-18T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2014-01-24T00:00:00.000Z') });
+        transactions.push({ amount: 1513.62, when: new Date('2015-01-30T00:00:00.000Z') });
+        transactions.push({ amount: 1765.89, when: new Date('2016-01-22T00:00:00.000Z') });
+        transactions.push({ amount: 1765.89, when: new Date('2017-01-20T00:00:00.000Z') });
+        transactions.push({ amount: 22421.55, when: new Date('2017-06-05T18:30:00.000Z') });
+
+        var result = xirr(transactions);
+        assert.equal(0.212686, result.toPrecision(6));
+    });
+
+    it('does not error out on lots of data', function() {
+        var transactions = [];
+        var cnt = 120;
+        for (var i=0; i<cnt; i++) {
+            transactions.push({ amount: -1000, when: new Date(2010+(i/12),i%12,1) });
+        }
+        transactions.push({ amount: cnt*1000*1.5, when: new Date(2020,0,1) });
+        var result = xirr(transactions);
+        assert.equal(0.0785780, result.toPrecision(6));
+    });
+
     describe('failure modes', function() {
         it('throws an exception when Newton\'s method fails', sinon.test(function() {
             var newtonStub = sinon.stub();

@@ -16,8 +16,12 @@ function convert(data) {
     var negative = false;
     var nonnegative = false;
     var total = 0;
+    var deposits = 0;
     data.forEach(function(datum) {
         total += datum.amount;
+        if (datum.amount < 0) {
+            deposits += -datum.amount;
+        }
         var epochDays = Math.floor(datum.when/MILLIS_PER_DAY);
         start = Math.min(start, epochDays);
         end = Math.max(end, epochDays);
@@ -43,13 +47,10 @@ function convert(data) {
     });
     return {
         total: total,
+        deposits: deposits,
+        days: end - start,
         investments: investments
     };
-}
-
-function signum(num) {
-    return num > 0 ? 1
-        : num < 0 ? -1 : 0;
 }
 
 function xirr(transactions, options) {
@@ -75,7 +76,7 @@ function xirr(transactions, options) {
             }
         }, 0);
     };
-    var guess = signum(data.total)/100;
+    var guess = (data.total / data.deposits) / (data.days/DAYS_IN_YEAR);
     var rate = newton(presentValue, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");
