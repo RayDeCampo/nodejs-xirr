@@ -1,6 +1,6 @@
 {
   "name": "xirr",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Compute the internal rate of return of a sequences of transactions made at irregular periods.",
   "keywords": [
     "xirr",
@@ -12,9 +12,9 @@
   "license": "MIT",
   "bugs": "https://github.com/RayDeCampo/nodejs-xirr/issues",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/RayDeCampo/nodejs-xirr.git"
-    },
+    "type": "git",
+    "url": "https://github.com/RayDeCampo/nodejs-xirr.git"
+  },
   "author": {
     "name": "Ray DeCampo",
     "email": "ray@decampo.org"
