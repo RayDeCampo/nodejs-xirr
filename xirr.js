@@ -56,7 +56,8 @@ function convert(data) {
 function xirr(transactions, options) {
     var data = convert(transactions);
     var investments = data.investments;
-    var presentValue = function(rate) {
+    // IRR calculation works w/ present or future value, future used to avoid division
+    var futureValue = function(rate) {
         return investments.reduce(function(sum, investment) {
             // Make the vars more Math-y, makes the derivative easier to see
             var A = investment.amount;
@@ -77,7 +78,7 @@ function xirr(transactions, options) {
         }, 0);
     };
     var guess = (data.total / data.deposits) / (data.days/DAYS_IN_YEAR);
-    var rate = newton(presentValue, derivative, guess, options);
+    var rate = newton(futureValue, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");
     }
