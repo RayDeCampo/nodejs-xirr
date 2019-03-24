@@ -72,6 +72,22 @@ describe('xirr', function() {
         assert.equal(-1, result.toPrecision(6));
     });
 
+    it('computes a rate of return of -100% on a total loss', function() {
+        var transactions = [];
+        transactions.push({ amount: -1000, when: new Date(2010, 0, 1) });
+        transactions.push({ amount: 0, when: new Date(2012, 0, 1) });
+        var result = xirr(transactions);
+        assert.equal(-1, result.toPrecision(6));
+    });
+
+    it('computes a rate of return of -100% on a total loss', function() {
+        var transactions = [];
+        transactions.push({ amount: -1000, when: new Date(2010, 0, 1) });
+        transactions.push({ amount: 0, when: new Date(2010, 7, 1) });
+        var result = xirr(transactions);
+        assert.equal(-1, result.toPrecision(6));
+    });
+
     it('does not error out on this data set (see issue #1)', function() {
         var transactions = [];
         transactions.push({ amount: -10000, when: new Date('2000-05-24T00:00:00.000Z') });

@@ -13,8 +13,8 @@ function convert(data) {
     var investments = [];
     var start = Math.floor(data[0].when/MILLIS_PER_DAY);
     var end = start;
-    var negative = false;
-    var nonnegative = false;
+    var minAmount = Number.POSITIVE_INFINITY;
+    var maxAmount = Number.NEGATIVE_INFINITY;
     var total = 0;
     var deposits = 0;
     data.forEach(function(datum) {
@@ -25,8 +25,8 @@ function convert(data) {
         var epochDays = Math.floor(datum.when/MILLIS_PER_DAY);
         start = Math.min(start, epochDays);
         end = Math.max(end, epochDays);
-        negative = negative || datum.amount < 0;
-        nonnegative = nonnegative || datum.amount >= 0;
+        minAmount = Math.min(minAmount, datum.amount);
+        maxAmount = Math.max(maxAmount, datum.amount);
         investments.push({
             amount: datum.amount,
             epochDays: epochDays
@@ -35,10 +35,10 @@ function convert(data) {
     if (start === end) {
         throw new Error('Transactions must not all be on the same day.');
     }
-    if (!negative) {
+    if (minAmount >= 0) {
         throw new Error('Transactions must not all be nonnegative.');
     }
-    if (!nonnegative) {
+    if (maxAmount < 0) {
         throw new Error('Transactions must not all be negative.');
     }
     investments.forEach(function(investment) {
@@ -49,12 +49,16 @@ function convert(data) {
         total: total,
         deposits: deposits,
         days: end - start,
-        investments: investments
+        investments: investments,
+        maxAmount: maxAmount
     };
 }
 
 function xirr(transactions, options) {
     var data = convert(transactions);
+    if (data.maxAmount === 0) {
+        return -1;
+    }
     var investments = data.investments;
     var value = function(rate) {
         return investments.reduce(function(sum, investment) {
