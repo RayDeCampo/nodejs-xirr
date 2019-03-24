@@ -97,6 +97,16 @@ describe('xirr', function() {
         assert.equal(0.212686, result.toPrecision(6));
     });
 
+    it('does not error out on this data set (see issue #2)', function() {
+        var transactions = [];
+        transactions.push({ amount: -2839.2, when: new Date('2018-01-21T16:00:00.000Z') });
+        transactions.push({ amount: -207.7, when: new Date('2018-01-24T16:00:00.000Z') });
+        transactions.push({ amount: 2526, when: new Date('2018-04-26T16:00:00.000Z') });
+
+        var result = xirr(transactions);
+        assert.equal(-0.514174, result.toPrecision(6));
+    });
+
     it('does not error out on lots of data', function() {
         var transactions = [];
         var cnt = 120;
