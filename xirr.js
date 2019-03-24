@@ -56,12 +56,34 @@ function convert(data) {
 function xirr(transactions, options) {
     var data = convert(transactions);
     var investments = data.investments;
-    var presentValue = function(rate) {
+    var value = function(rate) {
         return investments.reduce(function(sum, investment) {
             // Make the vars more Math-y, makes the derivative easier to see
             var A = investment.amount;
             var Y = investment.years;
-            return sum + A * Math.pow(1+rate, Y);
+            if (-1 < rate) {
+                return sum + A * Math.pow(1+rate, Y);
+            } else if (rate < -1) {
+                // Extend the function into the range where the rate is less
+                // than -100%.  Even though this does not make practical sense,
+                // it allows the algorithm to converge in the cases where the
+                // candidate values enter this range
+
+                // We cannot use the same formula as before, since the base of
+                // the exponent (1+rate) is negative, this yields imaginary
+                // values for fractional years.
+                // E.g. if rate=-1.5 and years=.5, it would be (-.5)^.5,
+                // i.e. the square root of negative one half.
+
+                // Instead we will consider it to be a total loss, plus an
+                // additional loss calculated from the amount the absolute value
+                // of the rate exceeds 100%.  So if the rate were -1.5 (-150%),
+                // the additional loss accumulates at 50%.
+
+                return sum - A * Math.pow(-1-rate, Y);
+            } else { // rate === -1
+                return sum;
+            }
         }, 0);
     };
     var derivative = function(rate) {
@@ -69,15 +91,19 @@ function xirr(transactions, options) {
             // Make the vars more Math-y, makes the derivative easier to see
             var A = investment.amount;
             var Y = investment.years;
-            if (Y !== 0) {
+            if (Y === 0) {
+                return sum;
+            } else if (-1 < rate) {
                 return sum + A * Y * Math.pow(1+rate, Y-1);
+            } else if (rate < -1) {
+                return sum - A * Y * Math.pow(-1-rate, Y-1);
             } else {
                 return sum;
             }
         }, 0);
     };
     var guess = (data.total / data.deposits) / (data.days/DAYS_IN_YEAR);
-    var rate = newton(presentValue, derivative, guess, options);
+    var rate = newton(value, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");
     }

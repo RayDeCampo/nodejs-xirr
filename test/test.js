@@ -107,6 +107,24 @@ describe('xirr', function() {
         assert.equal(-0.514174, result.toPrecision(6));
     });
 
+    it('succeeds even when the N-R algorithm values go into the range (-∞,-1]', function() {
+        var transactions = [];
+        transactions.push({ amount: -2610, when: new Date('2001-06-22T16:00:00.000Z') });
+        transactions.push({ amount: -2589, when: new Date('2001-07-03T16:00:00.000Z') });
+        transactions.push({ amount: -5110, when: new Date('2001-07-05T16:00:00.000Z') });
+        transactions.push({ amount: -2550, when: new Date('2001-07-06T16:00:00.000Z') });
+        transactions.push({ amount: -5086, when: new Date('2001-07-09T16:00:00.000Z') });
+        transactions.push({ amount: -2561, when: new Date('2001-07-10T16:00:00.000Z') });
+        transactions.push({ amount: -5040, when: new Date('2001-07-12T16:00:00.000Z') });
+        transactions.push({ amount: -2552, when: new Date('2001-07-13T16:00:00.000Z') });
+        transactions.push({ amount: -2530, when: new Date('2001-07-16T16:00:00.000Z') });
+        transactions.push({ amount: -9840, when: new Date('2001-07-17T16:00:00.000Z') });
+        transactions.push({ amount: 38900, when: new Date('2001-07-18T16:00:00.000Z') });
+
+        var result = xirr(transactions);
+        assert.equal(-0.835340, result.toPrecision(6));
+    });
+
     it('does not error out on lots of data', function() {
         var transactions = [];
         var cnt = 120;
