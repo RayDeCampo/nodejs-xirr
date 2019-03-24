@@ -79,13 +79,16 @@ function xirr(transactions, options) {
                 // E.g. if rate=-1.5 and years=.5, it would be (-.5)^.5,
                 // i.e. the square root of negative one half.
 
-                // Instead we will consider it to be a total loss, plus an
-                // additional loss calculated from the amount the absolute value
-                // of the rate exceeds 100%.  So if the rate were -1.5 (-150%),
-                // the additional loss accumulates at 50%.
+                // Ensure the values are always negative so there can never
+                // be a zero (as long as some amount is non-zero).
+                // This formula also ensures that the derivative is positive
+                // (when rate < -1) so that Newton's method is encouraged to 
+                // move the candidate values towards the proper range
 
-                return sum - A * Math.pow(-1-rate, Y);
-            } else { // rate === -1
+                return sum - Math.abs(A) * Math.pow(-1-rate, Y);
+            } else if (Y === 0) {
+                return sum + A;  // Treat 0^0 as 1
+            } else {
                 return sum;
             }
         }, 0);
@@ -100,7 +103,7 @@ function xirr(transactions, options) {
             } else if (-1 < rate) {
                 return sum + A * Y * Math.pow(1+rate, Y-1);
             } else if (rate < -1) {
-                return sum - A * Y * Math.pow(-1-rate, Y-1);
+                return sum + Math.abs(A) * Y * Math.pow(-1-rate, Y-1);
             } else {
                 return sum;
             }
