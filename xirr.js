@@ -109,7 +109,13 @@ function xirr(transactions, options) {
             }
         }, 0);
     };
-    var guess = (data.total / data.deposits) / (data.days/DAYS_IN_YEAR);
+    var { guess } = options || {};
+    if (guess && isNaN(guess)) {
+        throw new Error("option.guess must be a number.");
+    }
+    if (!guess) {
+        guess = (data.total / data.deposits) / (data.days/DAYS_IN_YEAR);
+    }
     var rate = newton(value, derivative, guess, options);
     if (rate === false) {  // truthiness strikes again, !rate is true when rate is zero
         throw new Error("Newton-Raphson algorithm failed to converge.");

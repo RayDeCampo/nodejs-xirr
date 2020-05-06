@@ -152,6 +152,14 @@ describe('xirr', function() {
         assert.equal(0.0785780, result.toPrecision(6));
     });
 
+    it('Take guess as option', function() {
+        var transactions = [];
+        transactions.push({ amount: -1000, when: new Date(2010,0,1) });
+        transactions.push({ amount: 1100, when: new Date(2011,0,1) });
+        var result = xirr(transactions,  { guess: 0.1 } );
+        assert.equal(0.100000, result.toPrecision(6));
+    });
+
     describe('failure modes', function() {
         it('throws an exception when Newton\'s method fails', sinon.test(function() {
             var newtonStub = sinon.stub();
@@ -198,6 +206,14 @@ describe('xirr', function() {
             transactions.push({ amount: 0, when: new Date(2010, 8, 1) });
             assert.throws(function() { xirr(transactions); },
                 /Transactions must not all be nonnegative./);
+        });
+
+        it('NAN guess as option', function() {
+            var transactions = [];
+            transactions.push({ amount: -1000, when: new Date(2010,0,1) });
+            transactions.push({ amount: 1100, when: new Date(2011,0,1) });
+            assert.throws(function() { xirr(transactions, { guess: "10%" }); },
+                /option.guess must be a number./);
         });
     });
 });
