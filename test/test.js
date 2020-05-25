@@ -152,7 +152,7 @@ describe('xirr', function() {
         assert.equal(0.0785780, result.toPrecision(6));
     });
 
-    it('Take guess as option', function() {
+    it('takes guess as option', function() {
         var transactions = [];
         transactions.push({ amount: -1000, when: new Date(2010,0,1) });
         transactions.push({ amount: 1100, when: new Date(2011,0,1) });
@@ -208,7 +208,7 @@ describe('xirr', function() {
                 /Transactions must not all be nonnegative./);
         });
 
-        it('NAN guess as option', function() {
+        it('throws an exception when guess is not a number', function() {
             var transactions = [];
             transactions.push({ amount: -1000, when: new Date(2010,0,1) });
             transactions.push({ amount: 1100, when: new Date(2011,0,1) });

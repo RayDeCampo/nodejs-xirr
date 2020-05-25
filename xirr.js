@@ -109,7 +109,7 @@ function xirr(transactions, options) {
             }
         }, 0);
     };
-    var { guess } = options || {};
+    var guess = options ? options.guess : undefined;
     if (guess && isNaN(guess)) {
         throw new Error("option.guess must be a number.");
     }
