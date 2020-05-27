@@ -123,6 +123,16 @@ describe('xirr', function() {
         assert.equal(-0.514174, result.toPrecision(6));
     });
 
+    it('converges for this coronavirus inspired data set (see issue #7):', function() {
+        var transactions = [];
+        transactions.push({ amount: -713.07, when: new Date(2020, 2, 4) });
+        transactions.push({ amount: 555.33, when: new Date(2020, 2, 17) });
+
+        // With the right guess, the computation will converge
+        var result = xirr(transactions, { guess: -0.9975 });
+        assert.equal(-0.999106, result.toPrecision(6));
+    });
+
     it('succeeds even when the N-R algorithm values go into the range (-∞,-1]', function() {
         var transactions = [];
         transactions.push({ amount: -2610, when: new Date('2001-06-22T16:00:00.000Z') });
