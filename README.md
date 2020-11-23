@@ -19,6 +19,12 @@ This means annualized rate of return is 25.04%.  That is, an equivalent investme
 
 This calculation can be used to compare disparate investments.
 
+## It doesn't converge?!
+
+If your calculation doesn't converge, try defining different values for the `guess` property in the `options` argument.  This is particularly likely to happen when the solution is near -1.
+
+Pull requests with superior methods for determining the starting point for Newton's method are welcome.
+
 ## API
 
 #### require('xirr')(transactions [, options])
@@ -29,7 +35,7 @@ Given a sequence of transactions, computes the internal rate of return.
 - `transations`: an array of objects with the following properties:
   - `amount`: the amount of the transaction
   - `when`: the Date when the transaction occurred
-- `options`: Options to pass directly to the underlying Newton's method implementation, [`newton-raphson-method`](https://github.com/scijs/newton-raphson-method)
+- `options`: Options to pass directly to the underlying Newton's method implementation, [`newton-raphson-method`](https://github.com/scijs/newton-raphson-method).  In addition, if the `guess` property is defined, it will be used as the initial guess for the algorithm.
 
 **Returns**: the annualized internal rate of return as a decimal in [-1,∞)
 
