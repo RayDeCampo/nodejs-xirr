@@ -27,11 +27,12 @@ Pull requests with superior methods for determining the starting point for Newto
 
 ## API
 
-#### require('xirr')(transactions [, options])
+### require('xirr')(transactions [, options])
 
 Given a sequence of transactions, computes the internal rate of return.
 
 **Parameters**:
+
 - `transations`: an array of objects with the following properties:
   - `amount`: the amount of the transaction
   - `when`: the Date when the transaction occurred
@@ -40,6 +41,7 @@ Given a sequence of transactions, computes the internal rate of return.
 **Returns**: the annualized internal rate of return as a decimal in [-1,∞)
 
 **Throws**:
+
 - Error:
   - when the `amount`s of the transactions are all the same sign
   - when there are fewer than two transactions
