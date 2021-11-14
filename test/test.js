@@ -123,7 +123,7 @@ describe('xirr', function() {
         assert.equal(-0.514174, result.toPrecision(6));
     });
 
-    it('converges for this coronavirus inspired data set (see issue #7):', function() {
+    it('converges for this coronavirus inspired data set (see issue #7)', function() {
         var transactions = [];
         transactions.push({ amount: -713.07, when: new Date(2020, 2, 4) });
         transactions.push({ amount: 555.33, when: new Date(2020, 2, 17) });
@@ -133,7 +133,7 @@ describe('xirr', function() {
         assert.equal(-0.999106, result.toPrecision(6));
     });
 
-    it('converges for this data set (see issue #14', function() {
+    it('converges for this data set (see issue #14)', function() {
         var transactions = [];
         transactions.push({ amount: -99995, when: new Date(2021, 7, 3)});
         transactions.push({ amount: 97642, when: new Date(2021, 7, 9) });
