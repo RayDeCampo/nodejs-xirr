@@ -1,0 +1,19 @@
+# Long-running development container with the repo bind-mounted at /src.
+#
+#   podman compose up -d              # or: docker compose up -d
+#   podman compose exec dev bash      # shell inside the container
+#   podman compose exec dev npm ci
+#   podman compose exec dev npx grunt jshint mochaTest
+#   podman compose down               # stop and remove (code and node_modules stay on the host)
+#
+# Runs as root inside the container. Under rootless Podman or rootless Docker,
+# container root maps to your own user, so files created in /src (node_modules,
+# etc.) are owned by you on the host.
+services:
+  dev:
+    image: docker.io/library/node:24
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: sleep infinity
+    init: true
