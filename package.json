@@ -20,6 +20,9 @@
     "email": "ray@decampo.org"
   },
   "contributors": [],
+  "scripts": {
+    "test": "grunt jshint mochaTest"
+  },
   "dependencies": {
     "newton-raphson-method": "^1.0.0"
   },
