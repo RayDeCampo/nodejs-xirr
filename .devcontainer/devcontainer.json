@@ -1,0 +1,5 @@
+{
+    "name": "nodejs-xirr",
+    "image": "docker.io/library/node:24",
+    "postCreateCommand": "npm ci"
+}
