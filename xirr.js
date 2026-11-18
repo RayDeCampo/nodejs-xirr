@@ -5,13 +5,21 @@ var newton = require('newton-raphson-method');
 var MILLIS_PER_DAY = 1000*60*60*24;
 var DAYS_IN_YEAR = 365;
 
+// Day number of the local calendar date, so that time zones and daylight
+// saving time do not move a date to the previous or next day.
+function toEpochDays(when) {
+    var date = new Date(when);
+    var utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    return Math.floor(utc/MILLIS_PER_DAY);
+}
+
 function convert(data) {
     if (!data || !data.length || !data.forEach || data.length < 2) {
         throw new Error('Argument is not an array with length of 2 or more.');
     }
 
     var investments = [];
-    var start = Math.floor(data[0].when/MILLIS_PER_DAY);
+    var start = toEpochDays(data[0].when);
     var end = start;
     var minAmount = Number.POSITIVE_INFINITY;
     var maxAmount = Number.NEGATIVE_INFINITY;
@@ -22,7 +30,7 @@ function convert(data) {
         if (datum.amount < 0) {
             deposits += -datum.amount;
         }
-        var epochDays = Math.floor(datum.when/MILLIS_PER_DAY);
+        var epochDays = toEpochDays(datum.when);
         start = Math.min(start, epochDays);
         end = Math.max(end, epochDays);
         minAmount = Math.min(minAmount, datum.amount);
