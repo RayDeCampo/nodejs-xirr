@@ -107,7 +107,7 @@ describe('xirr', function() {
         transactions.push({ amount: 1513.62, when: new Date('2015-01-30T00:00:00.000Z') });
         transactions.push({ amount: 1765.89, when: new Date('2016-01-22T00:00:00.000Z') });
         transactions.push({ amount: 1765.89, when: new Date('2017-01-20T00:00:00.000Z') });
-        transactions.push({ amount: 22421.55, when: new Date('2017-06-05T18:30:00.000Z') });
+        transactions.push({ amount: 22421.55, when: new Date('2017-06-05T00:00:00.000Z') });
 
         var result = xirr(transactions);
         assert.equal(0.212686, result.toPrecision(6));
@@ -177,6 +177,26 @@ describe('xirr', function() {
         transactions.push({ amount: 1100, when: new Date(2011,0,1) });
         var result = xirr(transactions,  { guess: 0.1 } );
         assert.equal(0.100000, result.toPrecision(6));
+    });
+
+    it('uses the local date in time zones with summer time (see issue #24)', function() {
+        var savedTZ = process.env.TZ;
+        process.env.TZ = 'Europe/London';
+        try {
+            var transactions = [];
+            transactions.push({ amount: -1000, when: new Date(2016, 0, 15) });
+            transactions.push({ amount: -2500, when: new Date(2016, 1, 8) });
+            transactions.push({ amount: -1000, when: new Date(2016, 3, 17) });
+            transactions.push({ amount: 5050, when: new Date(2016, 7, 24) });
+            var result = xirr(transactions);
+            assert.equal(0.250423, result.toPrecision(6));
+        } finally {
+            if (savedTZ === undefined) {
+                delete process.env.TZ;
+            } else {
+                process.env.TZ = savedTZ;
+            }
+        }
     });
 
     describe('failure modes', function() {
